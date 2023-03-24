@@ -3,6 +3,7 @@ const router = require('express').Router()
 
 const { SECRET } = require('../util/config')
 const User = require('../models/user')
+const NotAuthorized = require('../errors/NotAuthorizedError')
 
 router.post('/', async (request, response) => {
   const body = request.body
@@ -13,15 +14,10 @@ router.post('/', async (request, response) => {
     }
   })
 
-  if(!user) {
-    throw Error(`No such user: ${body.username}`)
-  }
-
-  console.log(`Username ${JSON.stringify(user)} user id: ${user.id}`)
   const passwordCorrect = body.password === 'salainen'
 
   if((!(user && passwordCorrect))) {
-    throw Error('Incorrect username or password!')
+    throw new NotAuthorized('Incorrect username or password!')
   }
 
   const userForToken = {

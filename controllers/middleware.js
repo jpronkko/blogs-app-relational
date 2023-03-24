@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../util/config')
 const { User } = require('../models')
+const TokenNotFoundError = require('../errors/TokenNotFoundError')
+const { response } = require('express')
 
 const usernameFinder = async (req, res, next) => {
   //req.user = await User.findByPk(req.params.id)
@@ -21,7 +23,23 @@ const userFromTokenFinder = async (req, res, next) => {
 const tokenExtractor = (req, res, next) => {
   const authorization = req.get('authorization')
   console.log(`Authorization: ${authorization}`)
-  
+
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+      req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
+  } else {
+    //return res.status(401).json({ error: 'token missing'})
+    next(new TokenNotFoundError())
+  }
+
+  console.log(`Decoded token: ${JSON.stringify(req.decodedToken.id)}`)
+  next()
+
+}
+
+/*const tokenExtractor = (req, res, next) => {
+  const authorization = req.get('authorization')
+  console.log(`Authorization: ${authorization}`)
+
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
       req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
@@ -33,7 +51,7 @@ const tokenExtractor = (req, res, next) => {
   }
   console.log(`Decoded token: ${JSON.stringify(req.decodedToken.id)}`)
   next()
-}
+}*/
 
 const unknownEndpoint = (req, res) => {
   var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -44,8 +62,23 @@ const unknownEndpoint = (req, res) => {
 
 const errorHandler = (err, req, res, next) => {
 
-  console.error(`Error name ${err.name}, ${err.message}, ${req.params}, ${err.stack}`)
-  next(err)
+  console.error(`Error name ${err.name}, ${err.message}, ${err.stack}`)
+
+  if(err.name === 'SequelizeValidationError') {
+    return res.status(400).send({ error: err.message })
+  } else if(err.name === 'TokenNotFoundError') {
+    return res.status(401).send({ error: err.message })
+  } else if(err.name === 'NotAuthorizedError') {
+    return res.status(401).send({ error: err.message })
+  } else if(err.name === 'BlogNotFoundError') {
+    return res.status(401).send({ error: err.message })
+  } else if(err.name === 'UserNotFoundError') {
+    return res.status(401).send({ error: err.message })
+  } else if(err.name === 'JsonWebTokenError') {
+    return res.status(400).send({ error: 'Token error, please relogin.' })
+  }
+  //next(err)
+  return res.status(501).send({ error: err.message })
 }
 
 module.exports = { tokenExtractor, usernameFinder, userFromTokenFinder, unknownEndpoint, errorHandler }

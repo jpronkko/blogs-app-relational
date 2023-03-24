@@ -3,6 +3,10 @@ const router = require('express').Router()
 const { Blog, User } = require('../models')
 const { tokenExtractor, userFromTokenFinder } = require('./middleware')
 
+const BlogNotFoundError = require('../errors/BlogNotFoundError')
+const NotAuthorizedError = require('../errors/NotAuthorizedError')
+const UserNotFoundError = require('../errors/UserNotFoundError')
+
 const blogFinder = async (req, res, next) => {
   req.blog = await Blog.findByPk(req.params.id)
   next()
@@ -22,12 +26,12 @@ router.get('/', async (req, res) => {
 router.post('/', tokenExtractor, userFromTokenFinder,  async (req, res) => {
   const user = req.user
   if(!user) {
-    throw Error('No user foound!')
+    throw new UserNotFoundError()
   }
 
   const blog = await Blog.create({...req.body, userId: user.id})
   if(!blog) {
-    throw Error('Create blog failed!')
+    throw new Error('Create blog failed!')
   }
   res.json(blog)
 })
@@ -35,15 +39,15 @@ router.post('/', tokenExtractor, userFromTokenFinder,  async (req, res) => {
 router.put('/:id', tokenExtractor, userFromTokenFinder, blogFinder, async (req, res) => {
   const user = req.user
   if(!user) {
-    throw Error('No user foound!')
+    throw new UserNotFoundError()
   }
 
   const blog = req.blog
   if(!blog)
-    throw Error("No blog found")
+    throw new BlogNotFoundError()
 
   if(user.id !== blog.userId) {
-    throw Error("Not owner of the blog")
+    throw new NotAuthorizedError("Not owner of the blog")
   }
 
   blog.likes = req.body.likes
@@ -54,16 +58,16 @@ router.put('/:id', tokenExtractor, userFromTokenFinder, blogFinder, async (req, 
 router.delete('/:id', tokenExtractor, userFromTokenFinder, blogFinder,async (req, res) => {
   const user = req.user
   if(!user) {
-    throw Error('No user foound!')
+    throw new Error('No user foound!')
   }
 
   const blog = req.blog
   if(!blog) {
-    throw Error("No blog found")
+    throw new BlogNotFoundError()
   }
 
   if(user.id !== blog.userId) {
-    throw Error("Not owner of the blog")
+    throw new NotAuthorizedError("Not owner of the blog")
   }
   blog.destroy()
   res.status(204).end()
