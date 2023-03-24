@@ -1,0 +1,37 @@
+###
+GET http://localhost:3001/api/users HTTP/1.1
+
+###
+
+POST http://localhost:3001/api/users HTTP/1.1
+content-type: application/json
+
+{
+    "username": "nomad2",
+    "name": "Nomad2"
+}
+
+
+###
+PUT http://localhost:3001/api/users/nomad HTTP/1.1
+content-type: application/json
+
+{
+    "username": "comad"
+}
+
+###
+PUT http://localhost:3001/api/users/nomad HTTP/1.1
+content-type: application/json
+
+{
+    "username": "comad"
+}
+
+###
+DELETE http://localhost:3001/api/users/comad HTTP/1.1
+authorization: bearer b15fbfaa
+
+###
+DELETE http://localhost:3001/api/users/kuukkeli HTTP/1.1
+authorization: bearer b15fbfaa

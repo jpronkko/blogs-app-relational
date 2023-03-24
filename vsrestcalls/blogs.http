@@ -1,0 +1,69 @@
+###
+GET http://localhost:3001/api/blogs HTTP/1.1
+
+###
+
+POST http://localhost:3001/api/blogs HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
+
+{
+    "author": "Nomad",
+    "url": "http;//www.dpreview.com",
+    "title": "No man's sky III"
+}
+
+###
+POST http://localhost:3001/api/blogs HTTP/1.1
+content-type: application/json
+authorization: bearer bloopappa
+
+{
+    "author": "Nomad",
+    "url": "http;//www.dpreview.com",
+    "title": "No man's sky"
+}
+
+###
+POST http://localhost:3001/api/blogs HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NTUxODF9.SCmwkNRlpbvl96RKrkkjkG8o6Iua4thZ0vUKZ5EQxOg
+
+{
+    "author": "xxxxx",
+    "url": "http;//www.dpreview.com",
+    "title": "No man's why?"
+}
+
+
+
+###
+PUT http://localhost:3001/api/blogs/11 HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
+
+{
+    "likes": 16
+}
+
+###
+PUT http://localhost:3001/api/blogs/888 HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
+
+{
+    "likes": 15
+}
+
+###
+DELETE http://localhost:3001/api/blogs/8 HTTP/1.1
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
+
+###
+DELETE http://localhost:3001/api/blogs/10 HTTP/1.1
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
+
+###
+DELETE http://localhost:3001/api/blogs/12 HTTP/1.1
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
+

@@ -1,0 +1,4 @@
+#!/bin/bash
+#psql -h host -U username -d myDataBase -a -f myInsertFile
+#psql -h localhost -p 5432 -U postgres blogs_app_rel
+psql -h localhost -U postgres -d blogs_app_rel -a -f commands.sql
