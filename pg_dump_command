@@ -1,0 +1,2 @@
+#!/bin/bash
+pg_dump -h localhost -U postgres -W -F p blogs_app_rel > db_backup.tar

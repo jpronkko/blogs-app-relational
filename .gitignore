@@ -1,3 +1,5 @@
 node_modules
 postgres_cluster_info.txt
 .env
+db_backup.tar
+

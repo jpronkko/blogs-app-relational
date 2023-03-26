@@ -2,7 +2,16 @@
 GET http://localhost:3001/api/blogs HTTP/1.1
 
 ###
+GET http://localhost:3001/api/blogs?search=React HTTP/1.1
 
+###
+GET http://localhost:3001/api/blogs?search=react HTTP/1.1
+
+###
+GET http://localhost:3001/api/blogs?search=edgar HTTP/1.1
+
+
+###
 POST http://localhost:3001/api/blogs HTTP/1.1
 content-type: application/json
 authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
