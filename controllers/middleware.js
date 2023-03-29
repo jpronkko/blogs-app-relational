@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../util/config')
-const { User } = require('../models')
+const { User, Session } = require('../models')
 const TokenNotFoundError = require('../errors/TokenNotFoundError')
-const { response } = require('express')
+
+const { Op } = require('sequelize')
 
 const usernameFinder = async (req, res, next) => {
   //req.user = await User.findByPk(req.params.id)
@@ -15,9 +16,23 @@ const usernameFinder = async (req, res, next) => {
 }
 
 const userFromTokenFinder = async (req, res, next) => {
-  req.user = await User.findOne(req.decodedToken.id)
-  console.log(`User from token finder: ${JSON.stringify(req.user)}`)
-  next()
+  const userId = req.decodedToken.id
+  const session = await Session.findOne({
+    where: {
+      [Op.and]: [
+        { userId: userId },
+        { token: req.token }
+      ]
+    }
+  })
+  
+  if(session) {
+    req.user = await User.findByPk(userId)
+    console.log(`User from token finder: ${JSON.stringify(req.user)}`)
+    next()
+  } else {
+    next(TokenNotFoundError)
+  }
 }
 
 const tokenExtractor = (req, res, next) => {
@@ -25,7 +40,9 @@ const tokenExtractor = (req, res, next) => {
   console.log(`Authorization: ${authorization}`)
 
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-      req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
+    const token = authorization.substring(7)
+    req.token = token
+    req.decodedToken = jwt.verify(token, SECRET)
   } else {
     //return res.status(401).json({ error: 'token missing'})
     next(new TokenNotFoundError())

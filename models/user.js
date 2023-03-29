@@ -19,12 +19,33 @@ User.init({
     validate: {
       isEmail: true 
     }
+  },
+  disabled: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 }, {
   sequelize,
   underscored: true,
   timestamps: true,
-  modelName: 'user'
+  modelName: 'user',
+  defaultScope: {
+    where: {
+      disabled: false
+    }
+  },
+  scopes: {
+    disabled: {
+      where: {
+        disabled: true
+      }
+    },
+    enabled: {
+      where: {
+        disabled: false
+      }
+    }
+  }
 })
 
 module.exports = User

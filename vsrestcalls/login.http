@@ -12,7 +12,7 @@ POST http://localhost:3001/api/login HTTP/1.1
 content-type: application/json
 
 {
-    "username": "nomad",
+    "username": "nomad2@koppi.com",
     "password": "12345"
 }
 
@@ -21,6 +21,6 @@ POST http://localhost:3001/api/login HTTP/1.1
 content-type: application/json
 
 {
-    "username": "comad",
+    "username": "nomad2@koppi.com",
     "password": "salainen"
 }

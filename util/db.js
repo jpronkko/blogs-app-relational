@@ -5,10 +5,10 @@ const { Umzug, SequelizeStorage } = require('umzug')
 //const sequelize = new Sequelize(DATABASE_URL)
 const sequelize = new Sequelize(DATABASE_URL, {
   dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
+    // ssl: {
+      // require: true,
+      // rejectUnauthorized: false
+    // }
   },
 });
 

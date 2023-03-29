@@ -1,6 +1,6 @@
 const router = require('express').Router()
 
-const { Blog, User } = require('../models')
+const { Blog, User, ReadingList } = require('../models')
 const { tokenExtractor, usernameFinder } = require('./middleware')
 
 const BlogNotFoundError = require('../errors/BlogNotFoundError')
@@ -22,12 +22,49 @@ const getUsersFromReq = (req) => {
 }
 
 router.get('/', async (req, res) => {
-  const users = await User.findAll({
+  let where = {}
+
+  read = req.query.read 
+  if(read !== null && read !== undefined) {
+    where = { read: read }
+  }
+
+  const users = await User.scope(null).findAll({
+    /*attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
     include: {
-      model: Blog
-    }
+      model: Blog,
+      as: 'readings',
+      attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
+      through: {
+        attributes: { exclude: ['userId', 'blogId']}
+      },
+      where
+    }*/
   })
   res.json(users)
+})
+
+router.get('/:id', async (req, res) => {
+  let where = {}
+
+  read = req.query.read 
+  if(read !== null && read !== undefined) {
+    where = { isRead: read }
+  }
+
+  const user = await User.findByPk(req.params.id, {
+    attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
+    include: {
+      model: Blog,
+      as: 'readings',
+      attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
+      through: {
+        attributes: { exclude: ['userId', 'blogId']},
+        where
+      }
+    }
+  })
+  res.json(user)
 })
 
 router.post('/', async (req, res) => {

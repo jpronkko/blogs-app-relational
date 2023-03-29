@@ -82,7 +82,7 @@ router.put('/:id', tokenExtractor, userFromTokenFinder, blogFinder, async (req, 
   res.json(blog)
 })
 
-router.delete('/:id', tokenExtractor, userFromTokenFinder, blogFinder,async (req, res) => {
+router.delete('/:id', tokenExtractor, userFromTokenFinder, blogFinder, async (req, res) => {
   const user = req.user
   if(!user) {
     throw new Error('No user foound!')
@@ -96,7 +96,7 @@ router.delete('/:id', tokenExtractor, userFromTokenFinder, blogFinder,async (req
   if(user.id !== blog.userId) {
     throw new NotAuthorizedError("Not owner of the blog")
   }
-  blog.destroy()
+  await blog.destroy()
   res.status(204).end()
 })
 
