@@ -33,7 +33,7 @@ router.post('/', async (request, response) => {
   if(!session) {
     throw('Error create session failed!')
   }
-  
+
   response
     .status(200)
     .send({ token, username: user.username, name: user.name })

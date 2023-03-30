@@ -8,11 +8,11 @@ Blog.init({
     primaryKey: true,
     autoIncrement: true
   },
-  userId: {
+  /*userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'users', key: 'id' }
-  },
+  },*/
   author: {
     type: DataTypes.TEXT
   },
@@ -31,11 +31,11 @@ Blog.init({
   year: {
     type: DataTypes.INTEGER,
     //allowNull: false,
-    validate: { 
+    validate: {
       isBetweenYears(value) {
         if (!value)
-        return
-   
+          return
+
         const year = parseInt(value)
         if (year < 1991) {
           throw new Error('Year must be later or equal to 1991!')

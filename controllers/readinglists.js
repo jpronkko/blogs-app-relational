@@ -1,18 +1,10 @@
 const router = require('express').Router()
-const { Op } = require("sequelize")
+const { Op } = require('sequelize')
 
-const { ReadingList, User }  = require('../models')
-const NotAuthorized = require('../errors/NotAuthorizedError')
-const UserNotFoundError = require('../errors/UserNotFoundError')
+const { ReadingList, Blog }  = require('../models')
 const { tokenExtractor, userFromTokenFinder } = require('./middleware')
-const NotAuthorizedError = require('../errors/NotAuthorizedError')
 
 router.post('/', tokenExtractor, userFromTokenFinder,  async (req, res) => {
-  const user = req.user
-  if(!user) {
-    throw new UserNotFoundError()
-  }
-
   const entry = await ReadingList.create({ blogId: req.body.blogId, userId: req.body.userId })
   if(!entry) {
     throw new Error('Reading list entry failed!')
@@ -22,10 +14,15 @@ router.post('/', tokenExtractor, userFromTokenFinder,  async (req, res) => {
 
 router.put('/:id', tokenExtractor, userFromTokenFinder, async (req, res) => {
   const user = req.user
-  if(!user) {
-    throw new UserNotFoundError()
-  }
   const blogId = req.params.id
+
+  const blogFound = await Blog.findOne({
+    where: { id: blogId }
+  })
+
+  if(!blogFound) {
+    throw new Error(`You are trying to use non existent blog id ${blogId}!`)
+  }
 
   const readingList = await ReadingList.findOne({
     where: {

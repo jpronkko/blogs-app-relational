@@ -1,0 +1,6 @@
+###
+# Log out, should remove entry from session table
+DELETE http://localhost:3001/api/logout HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
+

@@ -1,8 +1,13 @@
 ###
+# Get all users
 GET http://localhost:3001/api/users HTTP/1.1
 
 ###
+# Get a single user
+GET http://localhost:3001/api/users/2 HTTP/1.1
 
+###
+# Create a user
 POST http://localhost:3001/api/users HTTP/1.1
 content-type: application/json
 
@@ -11,9 +16,20 @@ content-type: application/json
     "name": "Nomad2"
 }
 
+###
+# Try to create a user with non valid username
+POST http://localhost:3001/api/users HTTP/1.1
+content-type: application/json
+
+{
+    "username": "fomadi",
+    "name": "Fomadi"
+}
+
 
 ###
-PUT http://localhost:3001/api/users/nomad HTTP/1.1
+# Try to change the username without token
+PUT http://localhost:3001/api/users/nomad2@koppi.com HTTP/1.1
 content-type: application/json
 
 {
@@ -21,11 +37,23 @@ content-type: application/json
 }
 
 ###
-PUT http://localhost:3001/api/users/nomad HTTP/1.1
+#  Try to change the username with to a non valid username
+PUT http://localhost:3001/api/users/nomad2@koppi.com HTTP/1.1
 content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoxLCJpYXQiOjE2ODAxNjc4OTV9.uegS4S_Ro_O1xv9QNrMsOmo52w_HLft6r12N1dvoRig
 
 {
     "username": "comad"
+}
+
+###
+#  Try to change the username to a valid username
+PUT http://localhost:3001/api/users/nomad2@koppi.com HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoxLCJpYXQiOjE2ODAxNjc4OTV9.uegS4S_Ro_O1xv9QNrMsOmo52w_HLft6r12N1dvoRig
+
+{
+    "username": "romad@goo.com"
 }
 
 ###

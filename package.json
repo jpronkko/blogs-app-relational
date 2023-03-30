@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "migration:down": "node util/rollback.js",
-    "migration:up": "node util/runmigrations.js"
+    "lint": "eslint './**/*.{js,jsx}'",
+    "migration:down": "node ./rollback.js",
+    "migration:up": "node ./runmigrations.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +28,8 @@
     "pg": "^8.10.0",
     "sequelize": "^6.29.3",
     "umzug": "^3.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.37.0"
   }
 }

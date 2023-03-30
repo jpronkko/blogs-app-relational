@@ -17,10 +17,6 @@ router.get('/', async (req, res) => {
   let where = {}
 
   if (req.query.search) {
-    /*where.title = {
-      //[Op.substring]: req.query.search
-      [Op.iLike]: `%${req.query.search}%`
-    }*/
     where = {
       [Op.or]: {
         title: {
@@ -30,9 +26,6 @@ router.get('/', async (req, res) => {
           [Op.iLike]: `%${req.query.search}%`
         }
       }
-
-      //[Op.substring]: req.query.search
-      
     }
   }
 
@@ -40,6 +33,7 @@ router.get('/', async (req, res) => {
     attributes: { exclude: ['userId'] },
     include: {
       model: User,
+      as: 'enteredBy',
       attributes: ['name']
     },
     order: [
@@ -56,7 +50,7 @@ router.post('/', tokenExtractor, userFromTokenFinder,  async (req, res) => {
     throw new UserNotFoundError()
   }
 
-  const blog = await Blog.create({...req.body, userId: user.id})
+  const blog = await Blog.create({ ...req.body, userId: user.id })
   if(!blog) {
     throw new Error('Create blog failed!')
   }
@@ -74,7 +68,7 @@ router.put('/:id', tokenExtractor, userFromTokenFinder, blogFinder, async (req, 
     throw new BlogNotFoundError()
 
   if(user.id !== blog.userId) {
-    throw new NotAuthorizedError("Not owner of the blog")
+    throw new NotAuthorizedError('Not owner of the blog')
   }
 
   blog.likes = req.body.likes
@@ -85,7 +79,7 @@ router.put('/:id', tokenExtractor, userFromTokenFinder, blogFinder, async (req, 
 router.delete('/:id', tokenExtractor, userFromTokenFinder, blogFinder, async (req, res) => {
   const user = req.user
   if(!user) {
-    throw new Error('No user foound!')
+    throw new Error('No user found!')
   }
 
   const blog = req.blog
@@ -94,7 +88,7 @@ router.delete('/:id', tokenExtractor, userFromTokenFinder, blogFinder, async (re
   }
 
   if(user.id !== blog.userId) {
-    throw new NotAuthorizedError("Not owner of the blog")
+    throw new NotAuthorizedError('Not owner of the blog')
   }
   await blog.destroy()
   res.status(204).end()

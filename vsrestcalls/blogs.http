@@ -1,17 +1,32 @@
 ###
+# Get all blogs
 GET http://localhost:3001/api/blogs HTTP/1.1
 
 ###
+# Get blogs with stuff in their title or author fields
 GET http://localhost:3001/api/blogs?search=React HTTP/1.1
 
 ###
 GET http://localhost:3001/api/blogs?search=react HTTP/1.1
 
 ###
-GET http://localhost:3001/api/blogs?search=edgar HTTP/1.1
+GET http://localhost:3001/api/blogs?search=jami HTTP/1.1
 
 
 ###
+# Posting a blog with no token
+POST http://localhost:3001/api/blogs HTTP/1.1
+content-type: application/json
+
+{
+    "author": "Nomad",
+    "url": "http;//www.dpreview.com",
+    "title": "No man's sky III"
+}
+
+
+###
+# Posting a blog with expired token
 POST http://localhost:3001/api/blogs HTTP/1.1
 content-type: application/json
 authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
@@ -23,6 +38,7 @@ authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyM
 }
 
 ###
+# Posting a blog with malformed token
 POST http://localhost:3001/api/blogs HTTP/1.1
 content-type: application/json
 authorization: bearer bloopappa
@@ -34,46 +50,108 @@ authorization: bearer bloopappa
 }
 
 ###
+# Posting a blog with token created using login (see file: login.http)
 POST http://localhost:3001/api/blogs HTTP/1.1
 content-type: application/json
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5vbWFkMkBrb3BwaS5jb20iLCJpZCI6MSwiaWF0IjoxNjc5OTAwNTgxfQ.K4dCYmOPRFL2VOHm0acfk2Rol1q2YjIwImIGBmF7J9I
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
 
 {
-    "author": "xxxxx",
-    "url": "http;//www.dpreview.com",
-    "title": "No man's why?",
+    "author": "Nexus One",
+    "url": "http;//www.ai.com",
+    "title": "No AI",
+    "year": "1995"
+}
+
+###
+# Try posting a blog with token created using login (see file: login.http)
+# Inapropriate year.
+POST http://localhost:3001/api/blogs HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
+
+{
+    "author": "Nexus One",
+    "url": "http;//www.ai.com",
+    "title": "No AI",
+    "year": "1990"
+}
+
+###
+# Try posting a blog with token created using login (see file: login.http)
+# Inapropriate year.
+POST http://localhost:3001/api/blogs HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
+
+{
+    "author": "Nexus One",
+    "url": "http;//www.ai.com",
+    "title": "No AI",
+    "year": "2024"
+}
+
+###
+# Posting a blog with token created using login (see file: login.http)
+POST http://localhost:3001/api/blogs HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
+
+{
+    "author": "Jami Kousa",
+    "url": "http;//www.ai.com",
+    "title": "No code, just ai, really?",
     "year": "2023"
 }
 
 
+###
+# Delete an existing blog with expired token
+DELETE http://localhost:3001/api/blogs/1 HTTP/1.1
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
 
 ###
-PUT http://localhost:3001/api/blogs/11 HTTP/1.1
+# Delete an existing blog with no token
+DELETE http://localhost:3001/api/blogs/1 HTTP/1.1
+
+###
+# Delete a non exitent blog
+DELETE http://localhost:3001/api/blogs/12 HTTP/1.1
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoxLCJpYXQiOjE2ODAxNjc4OTV9.uegS4S_Ro_O1xv9QNrMsOmo52w_HLft6r12N1dvoRig
+
+###
+# Delete an existing blog, note you need to use a token from login!
+DELETE http://localhost:3001/api/blogs/2 HTTP/1.1
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
+
+
+###
+# Alter the likes of a non exitent blog
+PUT http://localhost:3001/api/blogs/88 HTTP/1.1
 content-type: application/json
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
 
 {
     "likes": 16
 }
 
 ###
-PUT http://localhost:3001/api/blogs/888 HTTP/1.1
+# Alter the likes of an exitent blog without token
+PUT http://localhost:3001/api/blogs/1 HTTP/1.1
 content-type: application/json
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
+
+
+{
+    "likes": 16
+}
+
+###
+# Alter the likes of an existing blog (you need to create one if not exist) with working token 
+# from login
+PUT http://localhost:3001/api/blogs/3 HTTP/1.1
+content-type: application/json
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
 
 {
     "likes": 15
 }
-
-###
-DELETE http://localhost:3001/api/blogs/8 HTTP/1.1
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
-
-###
-DELETE http://localhost:3001/api/blogs/10 HTTP/1.1
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
-
-###
-DELETE http://localhost:3001/api/blogs/12 HTTP/1.1
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzk2NDgyMTB9.TlxVeqybsJ0WfHqFEb7uGQy61nlC930X583x9cl144Y
 

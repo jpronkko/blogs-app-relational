@@ -1,6 +1,6 @@
 const { Blog, User, ReadingList } = require('./models/')
 const { connectToDatabase } = require('./util/db')
-const { Op } = require("sequelize")
+const { Op } = require('sequelize')
 
 const findUsers = async () => {
   const user = await User.findByPk(1, {

@@ -11,6 +11,7 @@ const blogsRouter = require('./controllers/blogs')
 const userRouter = require('./controllers/users')
 const authorRouter = require('./controllers/authors')
 const readinglistRouter = require('./controllers/readinglists')
+const resetRouter = require('./controllers/reset')
 
 const { unknownEndpoint, errorHandler } = require('./controllers/middleware')
 
@@ -22,6 +23,7 @@ app.use('/api/blogs', blogsRouter)
 app.use('/api/users', userRouter)
 app.use('/api/authors', authorRouter)
 app.use('/api/readinglists', readinglistRouter)
+app.use('/api/reset',resetRouter)
 
 app.use(unknownEndpoint)
 app.use(errorHandler)

@@ -1,45 +1,17 @@
 const router = require('express').Router()
 
-const { Blog, User, ReadingList } = require('../models')
-const { tokenExtractor, usernameFinder } = require('./middleware')
-
-const BlogNotFoundError = require('../errors/BlogNotFoundError')
-const NotAuthorizedError = require('../errors/NotAuthorizedError')
 const UserNotFoundError = require('../errors/UserNotFoundError')
-
-const getUsersFromReq = (req) => {
-  const user = req.user
-  const userWithName = req.userWithName
-  if(!user || !userWithName) {
-    throw new UserNotFoundError()
-  }
-    
-  if(user.id !== userName.id) {
-    throw new NotAuthorizedError("Token and username do not match")
-  }
-
-  return user
-}
+const { Blog, User } = require('../models')
+const { tokenExtractor, userFromTokenFinder } = require('./middleware')
 
 router.get('/', async (req, res) => {
-  let where = {}
-
-  read = req.query.read 
-  if(read !== null && read !== undefined) {
-    where = { read: read }
-  }
-
   const users = await User.scope(null).findAll({
-    /*attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
+    ///attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
     include: {
       model: Blog,
-      as: 'readings',
-      attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
-      through: {
-        attributes: { exclude: ['userId', 'blogId']}
-      },
-      where
-    }*/
+      as: 'blogs',
+      attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] }
+    }
   })
   res.json(users)
 })
@@ -47,7 +19,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
   let where = {}
 
-  read = req.query.read 
+  const read = req.query.read
   if(read !== null && read !== undefined) {
     where = { isRead: read }
   }
@@ -59,11 +31,15 @@ router.get('/:id', async (req, res) => {
       as: 'readings',
       attributes: { exclude: ['userId', 'createdAt', 'updatedAt'] },
       through: {
-        attributes: { exclude: ['userId', 'blogId']},
+        attributes: { exclude: ['userId', 'blogId'] },
         where
       }
     }
   })
+
+  if(!user) {
+    throw new UserNotFoundError()
+  }
   res.json(user)
 })
 
@@ -75,15 +51,15 @@ router.post('/', async (req, res) => {
   res.json(user)
 })
 
-router.put('/:username', tokenExtractor, usernameFinder, async (req, res) => {
-  const user = getUsersFromReq(req, res)
-  user.username = req.body.username
+router.put('/:username', tokenExtractor, userFromTokenFinder, async (req, res) => {
+  const user = req.user
+  user.username = req.params.username
   await user.save()
   res.json(user)
 })
 
-router.delete('/:username', tokenExtractor, usernameFinder,async (req, res) => {
-  const user = getUsersFromReq(req, res)
+router.delete('/:username', tokenExtractor, userFromTokenFinder, async (req, res) => {
+  const user = req.user
   user.destroy()
   res.status(204).end()
 })

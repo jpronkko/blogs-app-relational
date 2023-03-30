@@ -1,4 +1,16 @@
 ###
+# Create a user
+POST http://localhost:3001/api/users HTTP/1.1
+content-type: application/json
+
+{
+    "username": "comad@foppi.com",
+    "name": "Comad"
+}
+
+
+###
+# Try login with non existen user
 POST http://localhost:3001/api/login HTTP/1.1
 content-type: application/json
 
@@ -8,11 +20,14 @@ content-type: application/json
 }
 
 ###
+# Login with existing user, but wrong password
+# Note: you need to create the user using the first
+# request
 POST http://localhost:3001/api/login HTTP/1.1
 content-type: application/json
 
 {
-    "username": "nomad2@koppi.com",
+    "username": "comad@foppi.com",
     "password": "12345"
 }
 
@@ -21,6 +36,6 @@ POST http://localhost:3001/api/login HTTP/1.1
 content-type: application/json
 
 {
-    "username": "nomad2@koppi.com",
+    "username": "comad@foppi.com",
     "password": "salainen"
 }

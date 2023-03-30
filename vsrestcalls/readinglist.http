@@ -1,18 +1,33 @@
 ###
+# Adding to users reading list
 POST http://localhost:3001/api/readinglists HTTP/1.1
 content-type: application/json
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5vbWFkMkBrb3BwaS5jb20iLCJpZCI6MSwiaWF0IjoxNjc5OTAwNTgxfQ.K4dCYmOPRFL2VOHm0acfk2Rol1q2YjIwImIGBmF7J9I
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
 
 {
-    "blogId": "1",
-    "userId": "1"
+    "blogId": "4",
+    "userId": "2"
 }
 
 ###
-PUT http://localhost:3001/api/readinglists/2 HTTP/1.1
+# Changing status to read
+PUT http://localhost:3001/api/readinglists/1 HTTP/1.1
 content-type: application/json
-authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5vbWFkMkBrb3BwaS5jb20iLCJpZCI6NywiaWF0IjoxNjgwMDEwNTA1fQ.xd-tQhddUHicKsaC7BRL6YyKmYF5DHfRF_GEHVyUajo
+authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNvbWFkQGZvcHBpLmNvbSIsImlkIjoyLCJpYXQiOjE2ODAxNzYwMzh9.v0Ik8uRcQlE7BZkzVRPTeiFL11VctXtL17pBRFTK1i0
 
 {
     "read": true
 }
+
+
+###
+# Get a single user
+GET http://localhost:3001/api/users/2?read=true HTTP/1.1
+
+###
+# Get a single user
+GET http://localhost:3001/api/users/2?read=false HTTP/1.1
+
+###
+# Get a single user
+GET http://localhost:3001/api/users/2 HTTP/1.1
